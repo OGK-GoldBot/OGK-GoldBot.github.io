@@ -155,7 +155,7 @@ footer p{max-width:none}
     <div class="hero-text">
       <span class="eyebrow">Expert Advisor · MetaTrader 5 · Goud</span>
       <h1>OGK.<span>Gold</span>Bot</h1>
-      <p class="lead">Een automatische goud-trader die met de trend meegaat. Elke positie heeft vanaf het begin een harde stop, en winst wordt automatisch vastgezet. Hier zie je wat hij deze week doet, en de echte test sinds 2018.</p>
+      <p class="lead">Een automatische goud-trader die met de trend meegaat. Elke positie heeft vanaf het begin een harde stop, en winst wordt automatisch vastgezet. Hier zie je wat hij deze week live doet, en de test sinds 2018.</p>
       <div class="chips">
         <span class="chip">XAUUSD</span><span class="chip">5-minuten grafiek</span><span class="chip">0,01 lot per positie</span><span class="chip">door Og.KinG</span>
       </div>
@@ -178,13 +178,13 @@ footer p{max-width:none}
       <div class="bar" aria-hidden="true"><i id="w-bar" style="width:0%"></i></div>
       <div class="netline">
         <span class="k small">Resultaat deze week</span>
-        <span class="big" id="w-net">€0,00</span>
+        <span style="display:flex;flex-direction:column;align-items:flex-end"><span class="big" id="w-net">0,0%</span><span class="small" id="w-eur">= €0,00 op een normaal account van €10.000</span></span>
       </div>
       <div class="open">
         <span class="small" id="open-title">Open posities: 0</span>
         <div id="open-list"></div>
       </div>
-      <span class="small">Live account · per gesloten positie · bedragen per 0,01 lot · ma–vr</span>
+      <span class="small">Echt cent-account (start 10.000 cent) · resultaat in % · € = dezelfde trades op een normaal account van €10.000 met 0,01 lot</span>
     </aside>
   </div>
 </div>
@@ -193,18 +193,18 @@ footer p{max-width:none}
   <div class="inner">
 
     <section aria-labelledby="t-recent">
-      <span class="eyebrow">Live resultaten · echt account</span>
+      <span class="eyebrow">Live · echt cent-account</span>
       <h2 id="t-recent">Week voor week</h2>
       <div class="two">
         <div class="card weeks">
           <table>
-            <thead><tr><th>Week</th><th>Winst</th><th>Verlies</th><th>Resultaat</th></tr></thead>
+            <thead><tr><th>Week</th><th>Winst</th><th>Verlies</th><th>Resultaat (op €10.000)</th></tr></thead>
             <tbody id="weeks-body"><tr><td colspan="4" class="empty">Nog geen gesloten posities. De eerste week verschijnt hier zodra de bot een positie sluit.</td></tr></tbody>
           </table>
         </div>
         <div class="card weeks">
           <table>
-            <thead><tr><th>Gesloten</th><th>Richting</th><th>Resultaat</th></tr></thead>
+            <thead><tr><th>Gesloten</th><th>Richting</th><th>Resultaat (op €10.000)</th></tr></thead>
             <tbody id="last-body"><tr><td colspan="3" class="empty">De laatste 10 gesloten posities komen hier.</td></tr></tbody>
           </table>
         </div>
@@ -213,13 +213,13 @@ footer p{max-width:none}
     </section>
 
     <section id="test" aria-labelledby="t-test">
-      <span class="eyebrow">Backtest · 2 jan 2018 tot okt 2026</span>
+      <span class="eyebrow">Backtest · 2 jan 2018 tot okt 2026 · start €10.000</span>
       <h2 id="t-test">De test sinds 2018</h2>
       <div class="card stats">
-        <div class="stat"><span class="k">Startbedrag</span><span class="v">€5.000</span><span class="s">vast 0,01 lot</span></div>
-        <div class="stat"><span class="k">Eindsaldo</span><span class="v pos">€30.529</span><span class="s">+€25.529 winst</span></div>
-        <div class="stat"><span class="k">Grootste daling</span><span class="v neg">−€3.136</span><span class="s">van top naar dal</span></div>
-        <div class="stat"><span class="k">Posities</span><span class="v">3.478</span><span class="s">31% verliezend</span></div>
+        <div class="stat"><span class="k">Startbedrag</span><span class="v">€10.000</span><span class="s">vast 0,01 lot</span></div>
+        <div class="stat"><span class="k">Eindsaldo</span><span class="v pos">€35.710</span><span class="s">+€25.710 winst (+257%)</span></div>
+        <div class="stat"><span class="k">Grootste daling</span><span class="v neg">−€3.868</span><span class="s">18,7% van de top · zwaarste in %: 23,7%</span></div>
+        <div class="stat"><span class="k">Posities</span><span class="v">3.496</span><span class="s">31% verliezend · winstfactor 1,56</span></div>
       </div>
       <div class="card chartbox" aria-label="Resultaat per jaar in euro">
         <svg viewBox="0 0 900 300" role="img">
@@ -236,7 +236,7 @@ footer p{max-width:none}
           <g id="bars"></g>
         </svg>
       </div>
-      <p class="meta">MT5 strategietester · RoboForex-data · XAUUSD M5 · model 1-minuut OHLC · hefboom 1:100</p>
+      <p class="meta">MT5 strategietester · RoboForex-data · XAUUSD M5 · model 1-minuut OHLC · hefboom 1:100 · start €10.000</p>
       <p class="note">De meeste winst komt uit 2025 en 2026, toen goud een sterke trend had. In 2020 en 2021 verloor de bot geld, en in 2024 was de winst klein. Zo werkt een trendvolger: in een trend verdient hij, in een zijwaartse markt verliest hij een beetje.</p>
     </section>
 
@@ -256,10 +256,10 @@ footer p{max-width:none}
       <span class="eyebrow">Eerlijk over de risico's</span>
       <h2 id="t-risk">Wat je moet weten</h2>
       <div class="grid4">
-        <div class="card item risk"><h3>De daling is groot</h3><p>Met €5.000 start zakte het saldo in de test op het slechtste moment €3.136. Dat is meer dan de helft van het startbedrag. Reken daarop voordat je begint.</p></div>
+        <div class="card item risk"><h3>Er komen dalingen</h3><p>Met €10.000 start zakte het vermogen in de test op het slechtste moment €3.868, bijna een vijfde van de top. In procenten was de zwaarste daling 23,7%. Reken daarop voordat je begint.</p></div>
         <div class="card item risk"><h3>Niet voor kleine accounts</h3><p>Per signaal kunnen meerdere posities tegelijk openstaan. Op een account van €500 is dat te veel risico. Een lichte versie met minder instappen wordt nog getest.</p></div>
         <div class="card item risk"><h3>Niet voor funded accounts</h3><p>Prop-firms hebben meestal een dagverlies van 5% en een totaal verlies van 10%. Deze versie gaat daar in de test overheen. Ook hiervoor komt eerst een aangepaste versie.</p></div>
-        <div class="card item risk"><h3>Een test is geen belofte</h3><p>Dit zijn resultaten op oude koersen. De echte markt kan anders lopen. De bot draait sinds 26 oktober 2026 live en op demo's. Dat is nog te kort om iets over te zeggen.</p></div>
+        <div class="card item risk"><h3>Een test is geen belofte</h3><p>Dit zijn resultaten op oude koersen. De echte markt kan anders lopen. De bot draait sinds 26 oktober 2026 live en op demo's. Dat is nog te kort om iets over te zeggen. Live draait op een cent-account: zo test de bot met echt geld en weinig risico.</p></div>
       </div>
     </section>
 
@@ -278,7 +278,7 @@ footer p{max-width:none}
 
     <footer>
       <p><strong>Geen financieel advies.</strong> Handelen in goud met hefboom is risicovol. Je kunt meer verliezen dan je verwacht, tot je hele inleg. Resultaten uit het verleden, ook uit een backtest of een live account, geven geen garantie voor de toekomst. Gebruik alleen geld dat je kunt missen.</p>
-      <p>OGK.GoldBot · gemaakt door Og.KinG · backtest uit de MT5 strategietester, oktober 2026 · live resultaten van een echt account, getoond per positie van 0,01 lot (geen saldo of accountnummer).</p>
+      <p>OGK.GoldBot · gemaakt door Og.KinG · backtest uit de MT5 strategietester, oktober 2026 · live resultaten van een echt cent-account (start 10.000 cent), in procenten en omgerekend naar een normaal account van €10.000 met 0,01 lot. Geen saldo of accountnummer.</p>
     </footer>
   </div>
 </main>
@@ -286,7 +286,7 @@ footer p{max-width:none}
 <script>
 (function(){
   /* ---------- backtest bars ---------- */
-  var data=[["2018",1846],["2019",1405],["2020",-358],["2021",-500],["2022",2712],["2023",2239],["2024",437],["2025",8805],["2026*",8944]];
+  var data=[["2018",1846],["2019",1405],["2020",-358],["2021",-500],["2022",2712],["2023",2239],["2024",437],["2025",8805],["2026*",9125]];
   var g=document.getElementById("bars"), ns="http://www.w3.org/2000/svg";
   var x0=60,x1=890,base=248,top=20,max=10000;
   var scale=(base-top)/max, slot=(x1-x0)/data.length, w=slot*0.56;
@@ -314,6 +314,8 @@ footer p{max-width:none}
   function isoWeek(a){var d=new Date(Date.UTC(a[0],a[1]-1,a[2]));var day=d.getUTCDay()||7;d.setUTCDate(d.getUTCDate()+4-day);var y=d.getUTCFullYear();var w=Math.ceil(((d-Date.UTC(y,0,1))/864e5+1)/7);return {y:y,w:w,key:y*100+w};}
   function weekMonday(a){var d=new Date(Date.UTC(a[0],a[1]-1,a[2]));var day=d.getUTCDay()||7;d.setUTCDate(d.getUTCDate()-day+1);return d;}
   function signed(v){return (v>0?"+":v<0?"−":"")+eur.format(Math.abs(v));}
+  var START=10000;
+  function pct(v){return (v>0?"+":v<0?"−":"")+(Math.abs(v)/START*100).toLocaleString("nl-NL",{minimumFractionDigits:1,maximumFractionDigits:2})+"%";}
   function cls(v){return v>0?"pos":v<0?"neg":"";}
 
   var nowSec=Math.floor(Date.now()/1000);
@@ -332,7 +334,8 @@ footer p{max-width:none}
   document.getElementById("w-rate").textContent= tot? Math.round(100*cw.win/tot)+"%" : "–";
   document.getElementById("w-bar").style.width = tot? (100*cw.win/tot)+"%" : "0%";
   if(!tot) document.getElementById("w-bar").parentNode.style.background="var(--band-line)";
-  var netEl=document.getElementById("w-net"); netEl.textContent=signed(cw.net);
+  var netEl=document.getElementById("w-net"); netEl.textContent=pct(cw.net);
+  document.getElementById("w-eur").textContent="= "+signed(cw.net)+" op een normaal account van €10.000";
   netEl.style.color = cw.net>0?"var(--band-win)":cw.net<0?"var(--band-loss)":"var(--band-ink)";
   if(D.export_utc>0) document.getElementById("upd").textContent="bijgewerkt "+fmtShow.format(new Date(D.export_utc*1000));
 
@@ -341,7 +344,7 @@ footer p{max-width:none}
   op.slice(0,6).forEach(function(o){
     var r=document.createElement("div"); r.className="row";
     var a=document.createElement("span"); a.textContent=(o.dir==="BUY"?"Buy":"Sell")+" "+String(o.volume).replace(".",",")+" · "+fmtShow.format(new Date(o.open_utc*1000));
-    var b=document.createElement("span"); b.textContent=signed(o.net_now); b.style.color=o.net_now>0?"var(--band-win)":o.net_now<0?"var(--band-loss)":"var(--band-muted)";
+    var b=document.createElement("span"); b.textContent=pct(o.net_now)+" ("+signed(o.net_now)+")"; b.style.color=o.net_now>0?"var(--band-win)":o.net_now<0?"var(--band-loss)":"var(--band-muted)";
     r.appendChild(a); r.appendChild(b); ol.appendChild(r);
   });
 
@@ -354,7 +357,7 @@ footer p{max-width:none}
       var c1=document.createElement("td"); c1.textContent="Wk "+W.w+" · "+dm.format(W.mon)+(k===curWeek?" (nu)":"");
       var c2=document.createElement("td"); c2.className="mono pos"; c2.textContent=W.win;
       var c3=document.createElement("td"); c3.className="mono neg"; c3.textContent=W.loss;
-      var c4=document.createElement("td"); c4.className="mono "+cls(W.net); c4.textContent=signed(W.net);
+      var c4=document.createElement("td"); c4.className="mono "+cls(W.net); c4.textContent=pct(W.net)+" ("+signed(W.net)+")";
       [c1,c2,c3,c4].forEach(function(c){tr.appendChild(c)}); wb.appendChild(tr);
     });
   }
@@ -365,7 +368,7 @@ footer p{max-width:none}
       var tr=document.createElement("tr");
       var c1=document.createElement("td"); c1.className="mono"; c1.textContent=fmtShow.format(new Date(t.close_utc*1000));
       var c2=document.createElement("td"); var p=document.createElement("span"); p.className="pill "+(t.dir==="BUY"?"buy":"sell"); p.textContent=t.dir==="BUY"?"Buy":"Sell"; c2.appendChild(p);
-      var c3=document.createElement("td"); c3.className="mono "+cls(t.net); c3.textContent=signed(t.net);
+      var c3=document.createElement("td"); c3.className="mono "+cls(t.net); c3.textContent=pct(t.net)+" ("+signed(t.net)+")";
       [c1,c2,c3].forEach(function(c){tr.appendChild(c)}); lb.appendChild(tr);
     });
   }
@@ -378,6 +381,5 @@ footer p{max-width:none}
   });
 })();
 </script>
-
 </body>
 </html>
