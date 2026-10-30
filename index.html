@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="OGK.GoldBot: automatische goud-trader voor MetaTrader 5. Live weekscore, eerlijke backtest sinds 2018 en de risico's.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>OGK.GoldBot</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a dark "trading floor" hero band with the live week scoreboard, then a light report sheet below — results first, explanation after */
+:root{
+  --paper:#f2f4f6;
+  --sheet:#ffffff;
+  --ink:#141b26;
+  --muted:#5a6575;
+  --line:#d7dce3;
+  --gold:#a8741c;
+  --gold-soft:#f3e6cc;
+  --win:#1f7a4a;
+  --loss:#b4372b;
+  --band:#0f1622;
+  --band-2:#182233;
+  --band-ink:#eef1f6;
+  --band-muted:#9aa6b8;
+  --band-line:#2a364a;
+  --band-gold:#e3b660;
+  --band-win:#55d39a;
+  --band-loss:#ff7a6b;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "Consolas", monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0b1018; --sheet:#131a25; --ink:#e8ecf2; --muted:#9aa5b5; --line:#263142;
+    --gold:#e0b25a; --gold-soft:#2a2414; --win:#4cc488; --loss:#ff6b5c;
+    --band:#070b11; --band-2:#121a26; --band-line:#223047; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0b1018; --sheet:#131a25; --ink:#e8ecf2; --muted:#9aa5b5; --line:#263142;
+  --gold:#e0b25a; --gold-soft:#2a2414; --win:#4cc488; --loss:#ff6b5c;
+  --band:#070b11; --band-2:#121a26; --band-line:#223047; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.inner{max-width:1040px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.08}
+h2{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:700}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0;max-width:65ch}
+.eyebrow{font-family:var(--f-mono);font-size:.76rem;letter-spacing:.09em;text-transform:uppercase;color:var(--gold)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* hero band */
+.band{background:radial-gradient(1200px 500px at 85% -10%, color-mix(in srgb, var(--band-gold) 16%, transparent), transparent 60%), var(--band);color:var(--band-ink)}
+.band .inner{padding-block:48px 56px;display:grid;grid-template-columns:1.1fr 1fr;gap:36px;align-items:center}
+.hero-text{display:flex;flex-direction:column;gap:18px;min-width:0}
+.band .eyebrow{color:var(--band-gold)}
+.hero h1{font-size:clamp(2.8rem,8vw,5.2rem);font-weight:800;letter-spacing:-.025em}
+.hero h1 span{color:var(--band-gold)}
+.lead{font-size:1.1rem;color:var(--band-muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--f-mono);font-size:.78rem;padding:4px 10px;border:1px solid var(--band-line);border-radius:999px;color:var(--band-ink)}
+.cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{font:inherit;font-size:.92rem;font-weight:600;padding:10px 16px;border-radius:6px;border:0;background:var(--band-gold);color:#141b26;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.ghost{background:transparent;color:var(--band-ink);border:1px solid var(--band-line)}
+.btn:focus-visible{outline:2px solid var(--band-gold);outline-offset:2px}
+
+/* scoreboard */
+.board{background:var(--band-2);border:1px solid var(--band-line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.board-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.board-head h2{font-size:1.25rem}
+.live{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--band-muted);display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--band-win);box-shadow:0 0 0 0 color-mix(in srgb, var(--band-win) 60%, transparent)}
+@media (prefers-reduced-motion:no-preference){.dot{animation:pulse 2s infinite}@keyframes pulse{70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}}
+.score{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cell{background:var(--band);border:1px solid var(--band-line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.cell .k{font-size:.75rem;color:var(--band-muted)}
+.cell .v{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:1.7rem;font-weight:500;line-height:1.2}
+.v.w{color:var(--band-win)} .v.l{color:var(--band-loss)}
+.netline{display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-top:1px solid var(--band-line);padding-top:12px;flex-wrap:wrap}
+.netline .big{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:2rem}
+.bar{height:8px;border-radius:999px;background:var(--band-loss);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--band-win)}
+.open{display:flex;flex-direction:column;gap:6px}
+.open .row{display:flex;justify-content:space-between;gap:8px;font-family:var(--f-mono);font-size:.82rem;color:var(--band-muted)}
+.small{font-size:.75rem;color:var(--band-muted)}
+
+/* body */
+main .inner{padding-block:56px 64px;display:flex;flex-direction:column;gap:64px}
+section{display:flex;flex-direction:column;gap:20px}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:8px}
+.weeks{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+th{font-size:.74rem;font-family:var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td.mono,td .mono{font-family:var(--f-mono)}
+.pos{color:var(--win)} .neg{color:var(--loss)}
+.pill{font-family:var(--f-mono);font-size:.72rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line)}
+.pill.buy{color:var(--win);border-color:color-mix(in srgb, var(--win) 40%, transparent)}
+.pill.sell{color:var(--loss);border-color:color-mix(in srgb, var(--loss) 40%, transparent)}
+.empty{padding:22px 16px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.two > *{min-width:0}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden}
+.stat{padding:18px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px;min-width:0}
+.stat:last-child{border-right:0}
+.stat .k{font-size:.82rem;color:var(--muted)}
+.stat .v{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:1.5rem;font-weight:500}
+.stat .s{font-size:.8rem;color:var(--muted)}
+.meta{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+.chartbox{padding:18px;overflow-x:auto}
+.chartbox svg{display:block;width:100%;min-width:560px;height:auto}
+.note{border-left:3px solid var(--gold);background:var(--gold-soft);padding:12px 16px;border-radius:0 6px 6px 0;max-width:none}
+
+.grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.item{padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.item p{color:var(--muted);font-size:.95rem}
+.risk{border-top:3px solid var(--loss);border-radius:0 0 8px 8px}
+
+.contact{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:center;background:var(--band);color:var(--band-ink);border-radius:12px;padding:28px}
+.contact p{color:var(--band-muted)}
+.handle{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.handle code{font-family:var(--f-mono);font-size:1.05rem;padding:9px 12px;border-radius:6px;background:var(--band-2);border:1px solid var(--band-line);user-select:all}
+.status{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--band-gold)}
+
+footer{font-size:.84rem;color:var(--muted);border-top:1px solid var(--line);padding-top:20px;display:flex;flex-direction:column;gap:8px}
+footer p{max-width:none}
+
+@media (max-width:820px){
+  .band .inner,.contact,.two{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:0}
+  .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .grid4{grid-template-columns:1fr}
+}
+@media (max-width:420px){ .score{grid-template-columns:repeat(3,minmax(0,1fr))} .cell .v{font-size:1.35rem} }
+</style>
+
+<!--OGK_DATA_START-->
+<script type="application/json" id="ogk-data">{"export_utc":1793380025,"account":"real","currency":"EUR","trades":[{"dir":"SELL","volume":0.01,"open_utc":1793095202,"close_utc":1793113248,"net":-49.88},{"dir":"SELL","volume":0.01,"open_utc":1793095203,"close_utc":1793113248,"net":-49.7},{"dir":"SELL","volume":0.01,"open_utc":1793095203,"close_utc":1793113248,"net":-49.77},{"dir":"SELL","volume":0.01,"open_utc":1793095204,"close_utc":1793113248,"net":-49.7},{"dir":"SELL","volume":0.01,"open_utc":1793095204,"close_utc":1793113248,"net":-49.51},{"dir":"SELL","volume":0.01,"open_utc":1793095204,"close_utc":1793113248,"net":-49.5},{"dir":"SELL","volume":0.01,"open_utc":1793095205,"close_utc":1793113248,"net":-49.52},{"dir":"SELL","volume":0.01,"open_utc":1793095203,"close_utc":1793113249,"net":-49.7},{"dir":"SELL","volume":0.01,"open_utc":1793095204,"close_utc":1793113249,"net":-49.69},{"dir":"SELL","volume":0.01,"open_utc":1793104341,"close_utc":1793113658,"net":-30.13},{"dir":"SELL","volume":0.01,"open_utc":1793106036,"close_utc":1793115727,"net":-29.76},{"dir":"SELL","volume":0.01,"open_utc":1793268403,"close_utc":1793318741,"net":24.93},{"dir":"SELL","volume":0.01,"open_utc":1793270097,"close_utc":1793322395,"net":24.85},{"dir":"SELL","volume":0.01,"open_utc":1793268403,"close_utc":1793322666,"net":24.72},{"dir":"SELL","volume":0.01,"open_utc":1793268403,"close_utc":1793322666,"net":24.73},{"dir":"SELL","volume":0.01,"open_utc":1793268403,"close_utc":1793322666,"net":24.76},{"dir":"SELL","volume":0.01,"open_utc":1793268404,"close_utc":1793322666,"net":24.76},{"dir":"SELL","volume":0.01,"open_utc":1793268404,"close_utc":1793322666,"net":24.75},{"dir":"SELL","volume":0.01,"open_utc":1793268404,"close_utc":1793322666,"net":24.77},{"dir":"SELL","volume":0.01,"open_utc":1793270097,"close_utc":1793330718,"net":24.97},{"dir":"SELL","volume":0.01,"open_utc":1793270097,"close_utc":1793330718,"net":24.97},{"dir":"SELL","volume":0.01,"open_utc":1793270097,"close_utc":1793330718,"net":24.97},{"dir":"SELL","volume":0.01,"open_utc":1793270098,"close_utc":1793330718,"net":24.97},{"dir":"SELL","volume":0.01,"open_utc":1793270098,"close_utc":1793330718,"net":24.97},{"dir":"SELL","volume":0.01,"open_utc":1793270098,"close_utc":1793330718,"net":24.97},{"dir":"SELL","volume":0.01,"open_utc":1793268374,"close_utc":1793338225,"net":20.07},{"dir":"SELL","volume":0.01,"open_utc":1793270096,"close_utc":1793347346,"net":39.76},{"dir":"SELL","volume":0.01,"open_utc":1793270096,"close_utc":1793347346,"net":39.91},{"dir":"SELL","volume":0.01,"open_utc":1793268402,"close_utc":1793348294,"net":39.98},{"dir":"SELL","volume":0.01,"open_utc":1793355601,"close_utc":1793364140,"net":25.15},{"dir":"SELL","volume":0.01,"open_utc":1793355603,"close_utc":1793364140,"net":25.32},{"dir":"SELL","volume":0.01,"open_utc":1793355601,"close_utc":1793365465,"net":35.21},{"dir":"SELL","volume":0.01,"open_utc":1793355603,"close_utc":1793365465,"net":35.38},{"dir":"SELL","volume":0.01,"open_utc":1793355601,"close_utc":1793365627,"net":40.79},{"dir":"SELL","volume":0.01,"open_utc":1793355603,"close_utc":1793365627,"net":40.99},{"dir":"SELL","volume":0.01,"open_utc":1793355601,"close_utc":1793367146,"net":45.63},{"dir":"SELL","volume":0.01,"open_utc":1793355603,"close_utc":1793367146,"net":45.97},{"dir":"SELL","volume":0.01,"open_utc":1793355601,"close_utc":1793367213,"net":50.32},{"dir":"SELL","volume":0.01,"open_utc":1793355603,"close_utc":1793367213,"net":50.3},{"dir":"SELL","volume":0.01,"open_utc":1793355604,"close_utc":1793367371,"net":55.32},{"dir":"SELL","volume":0.01,"open_utc":1793355601,"close_utc":1793368100,"net":55.23},{"dir":"SELL","volume":0.01,"open_utc":1793355604,"close_utc":1793368240,"net":60.27},{"dir":"SELL","volume":0.01,"open_utc":1793355600,"close_utc":1793368269,"net":60.32},{"dir":"SELL","volume":0.01,"open_utc":1793355600,"close_utc":1793368269,"net":60.3},{"dir":"SELL","volume":0.01,"open_utc":1793355602,"close_utc":1793368269,"net":60.41},{"dir":"SELL","volume":0.01,"open_utc":1793355602,"close_utc":1793368269,"net":60.44},{"dir":"SELL","volume":0.01,"open_utc":1793355602,"close_utc":1793368270,"net":60.49}],"open":[],"cent":false}</script>
+<!--OGK_DATA_END-->
+
+<div class="band">
+  <div class="inner hero">
+    <div class="hero-text">
+      <span class="eyebrow">Expert Advisor · MetaTrader 5 · Goud</span>
+      <h1>OGK.<span>Gold</span>Bot</h1>
+      <p class="lead">Een automatische goud-trader die met de trend meegaat. Elke positie heeft vanaf het begin een harde stop, en winst wordt automatisch vastgezet. Hier zie je wat hij deze week doet, en de echte test sinds 2018.</p>
+      <div class="chips">
+        <span class="chip">XAUUSD</span><span class="chip">5-minuten grafiek</span><span class="chip">0,01 lot per positie</span><span class="chip">door Og.KinG</span>
+      </div>
+      <div class="cta">
+        <a class="btn" href="https://t.me/MrOgKing" target="_blank" rel="noopener">Contact via Telegram</a>
+        <a class="btn ghost" href="#test">Bekijk de test</a>
+      </div>
+    </div>
+
+    <aside class="board" aria-labelledby="t-week">
+      <div class="board-head">
+        <h2 id="t-week">Deze week</h2>
+        <span class="live"><span class="dot"></span><span id="upd">wacht op eerste data</span></span>
+      </div>
+      <div class="score">
+        <div class="cell"><span class="k">Winst</span><span class="v w" id="w-win">0</span></div>
+        <div class="cell"><span class="k">Verlies</span><span class="v l" id="w-loss">0</span></div>
+        <div class="cell"><span class="k">Winrate</span><span class="v" id="w-rate">–</span></div>
+      </div>
+      <div class="bar" aria-hidden="true"><i id="w-bar" style="width:0%"></i></div>
+      <div class="netline">
+        <span class="k small">Resultaat deze week</span>
+        <span class="big" id="w-net">€0,00</span>
+      </div>
+      <div class="open">
+        <span class="small" id="open-title">Open posities: 0</span>
+        <div id="open-list"></div>
+      </div>
+      <span class="small">Live account · per gesloten positie · bedragen per 0,01 lot · ma–vr</span>
+    </aside>
+  </div>
+</div>
+
+<main>
+  <div class="inner">
+
+    <section aria-labelledby="t-recent">
+      <span class="eyebrow">Live resultaten · echt account</span>
+      <h2 id="t-recent">Week voor week</h2>
+      <div class="two">
+        <div class="card weeks">
+          <table>
+            <thead><tr><th>Week</th><th>Winst</th><th>Verlies</th><th>Resultaat</th></tr></thead>
+            <tbody id="weeks-body"><tr><td colspan="4" class="empty">Nog geen gesloten posities. De eerste week verschijnt hier zodra de bot een positie sluit.</td></tr></tbody>
+          </table>
+        </div>
+        <div class="card weeks">
+          <table>
+            <thead><tr><th>Gesloten</th><th>Richting</th><th>Resultaat</th></tr></thead>
+            <tbody id="last-body"><tr><td colspan="3" class="empty">De laatste 10 gesloten posities komen hier.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <p class="meta">Wordt elk uur automatisch bijgewerkt tijdens handelsdagen. Tijden in Nederlandse tijd.</p>
+    </section>
+
+    <section id="test" aria-labelledby="t-test">
+      <span class="eyebrow">Backtest · 2 jan 2018 tot okt 2026</span>
+      <h2 id="t-test">De test sinds 2018</h2>
+      <div class="card stats">
+        <div class="stat"><span class="k">Startbedrag</span><span class="v">€5.000</span><span class="s">vast 0,01 lot</span></div>
+        <div class="stat"><span class="k">Eindsaldo</span><span class="v pos">€30.529</span><span class="s">+€25.529 winst</span></div>
+        <div class="stat"><span class="k">Grootste daling</span><span class="v neg">−€3.136</span><span class="s">van top naar dal</span></div>
+        <div class="stat"><span class="k">Posities</span><span class="v">3.478</span><span class="s">31% verliezend</span></div>
+      </div>
+      <div class="card chartbox" aria-label="Resultaat per jaar in euro">
+        <svg viewBox="0 0 900 300" role="img">
+          <g font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)">
+            <line x1="60" y1="20" x2="890" y2="20" stroke="var(--line)"/>
+            <line x1="60" y1="96" x2="890" y2="96" stroke="var(--line)"/>
+            <line x1="60" y1="172" x2="890" y2="172" stroke="var(--line)"/>
+            <line x1="60" y1="248" x2="890" y2="248" stroke="var(--ink)"/>
+            <text x="52" y="24" text-anchor="end">10.000</text>
+            <text x="52" y="100" text-anchor="end">6.667</text>
+            <text x="52" y="176" text-anchor="end">3.333</text>
+            <text x="52" y="252" text-anchor="end">0</text>
+          </g>
+          <g id="bars"></g>
+        </svg>
+      </div>
+      <p class="meta">MT5 strategietester · RoboForex-data · XAUUSD M5 · model 1-minuut OHLC · hefboom 1:100</p>
+      <p class="note">De meeste winst komt uit 2025 en 2026, toen goud een sterke trend had. In 2020 en 2021 verloor de bot geld, en in 2024 was de winst klein. Zo werkt een trendvolger: in een trend verdient hij, in een zijwaartse markt verliest hij een beetje.</p>
+    </section>
+
+    <section aria-labelledby="t-how">
+      <span class="eyebrow">Wat hij doet</span>
+      <h2 id="t-how">In het kort</h2>
+      <div class="grid4">
+        <div class="card item"><h3>Met de trend mee</h3><p>De bot bepaalt eerst de richting van goud op meerdere tijdframes. Hij handelt alleen in die richting en nooit ertegenin.</p></div>
+        <div class="card item"><h3>Alleen op vaste momenten</h3><p>Hij stapt pas in als de markt aan zijn voorwaarden voldoet, en alleen op de uren dat goud het meest beweegt.</p></div>
+        <div class="card item"><h3>Elke positie een harde stop</h3><p>Vanaf de eerste seconde staat er een stop loss. Het maximale verlies per positie staat dus altijd vast.</p></div>
+        <div class="card item"><h3>Winst vastzetten</h3><p>Loopt een trade goed, dan zet de bot een deel van de winst vast. Trades die niet werken, sluit hij op tijd.</p></div>
+      </div>
+      <p class="note">De precieze regels, instellingen en code van OGK.GoldBot blijven privé. Deze pagina laat zien wát hij doet en hoe hij presteert, niet hoe hij gebouwd is.</p>
+    </section>
+
+    <section aria-labelledby="t-risk">
+      <span class="eyebrow">Eerlijk over de risico's</span>
+      <h2 id="t-risk">Wat je moet weten</h2>
+      <div class="grid4">
+        <div class="card item risk"><h3>De daling is groot</h3><p>Met €5.000 start zakte het saldo in de test op het slechtste moment €3.136. Dat is meer dan de helft van het startbedrag. Reken daarop voordat je begint.</p></div>
+        <div class="card item risk"><h3>Niet voor kleine accounts</h3><p>Per signaal kunnen meerdere posities tegelijk openstaan. Op een account van €500 is dat te veel risico. Een lichte versie met minder instappen wordt nog getest.</p></div>
+        <div class="card item risk"><h3>Niet voor funded accounts</h3><p>Prop-firms hebben meestal een dagverlies van 5% en een totaal verlies van 10%. Deze versie gaat daar in de test overheen. Ook hiervoor komt eerst een aangepaste versie.</p></div>
+        <div class="card item risk"><h3>Een test is geen belofte</h3><p>Dit zijn resultaten op oude koersen. De echte markt kan anders lopen. De bot draait sinds 26 oktober 2026 live en op demo's. Dat is nog te kort om iets over te zeggen.</p></div>
+      </div>
+    </section>
+
+    <section class="contact" aria-labelledby="t-contact">
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+        <span class="status">Nog niet te koop</span>
+        <h2 id="t-contact">Interesse of vragen?</h2>
+        <p>OGK.GoldBot is nog in test. Wil je op de hoogte blijven of meekijken op een demo, stuur dan een bericht via Telegram.</p>
+      </div>
+      <div class="handle">
+        <code id="tg">@MrOgKing</code>
+        <button class="btn ghost" id="copy" type="button">Kopieer</button>
+        <a class="btn" href="https://t.me/MrOgKing" target="_blank" rel="noopener">Open Telegram</a>
+      </div>
+    </section>
+
+    <footer>
+      <p><strong>Geen financieel advies.</strong> Handelen in goud met hefboom is risicovol. Je kunt meer verliezen dan je verwacht, tot je hele inleg. Resultaten uit het verleden, ook uit een backtest of een live account, geven geen garantie voor de toekomst. Gebruik alleen geld dat je kunt missen.</p>
+      <p>OGK.GoldBot · gemaakt door Og.KinG · backtest uit de MT5 strategietester, oktober 2026 · live resultaten van een echt account, getoond per positie van 0,01 lot (geen saldo of accountnummer).</p>
+    </footer>
+  </div>
+</main>
+
+<script>
+(function(){
+  /* ---------- backtest bars ---------- */
+  var data=[["2018",1846],["2019",1405],["2020",-358],["2021",-500],["2022",2712],["2023",2239],["2024",437],["2025",8805],["2026*",8944]];
+  var g=document.getElementById("bars"), ns="http://www.w3.org/2000/svg";
+  var x0=60,x1=890,base=248,top=20,max=10000;
+  var scale=(base-top)/max, slot=(x1-x0)/data.length, w=slot*0.56;
+  function txt(x,y,s,fill,anchor,size){var t=document.createElementNS(ns,"text");t.setAttribute("x",x);t.setAttribute("y",y);t.setAttribute("text-anchor",anchor||"middle");t.setAttribute("font-family","IBM Plex Mono, monospace");t.setAttribute("font-size",size||"12");t.setAttribute("fill",fill);t.textContent=s;g.appendChild(t);}
+  data.forEach(function(d,i){
+    var v=d[1], h=Math.abs(v)*scale, x=x0+slot*i+(slot-w)/2;
+    var r=document.createElementNS(ns,"rect");
+    r.setAttribute("x",x); r.setAttribute("width",w);
+    r.setAttribute("y", v>=0 ? base-h : base); r.setAttribute("height", Math.max(h,1.5));
+    r.setAttribute("fill", v>=0 ? "var(--win)" : "var(--loss)"); r.setAttribute("rx",2);
+    g.appendChild(r);
+    txt(x+w/2, v>=0 ? base-h-6 : base+h+14, (v>0?"+":"−")+Math.abs(v).toLocaleString("nl-NL"), "var(--ink)");
+    txt(x+w/2, 292, d[0], "var(--muted)");
+  });
+  txt(890,14,"euro per jaar · *2026 tot oktober","var(--muted)","end","11");
+
+  /* ---------- live week score ---------- */
+  var D={trades:[],open:[],export_utc:0};
+  try{ D=JSON.parse(document.getElementById("ogk-data").textContent)||D; }catch(e){}
+  var TZ="Europe/Amsterdam";
+  var fmtParts=new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"});
+  var fmtShow=new Intl.DateTimeFormat("nl-NL",{timeZone:TZ,weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+  var eur=new Intl.NumberFormat("nl-NL",{style:"currency",currency:(D.currency||"EUR")});
+  function ymd(sec){var p=fmtParts.formatToParts(new Date(sec*1000)),o={};p.forEach(function(x){o[x.type]=x.value});return [+o.year,+o.month,+o.day];}
+  function isoWeek(a){var d=new Date(Date.UTC(a[0],a[1]-1,a[2]));var day=d.getUTCDay()||7;d.setUTCDate(d.getUTCDate()+4-day);var y=d.getUTCFullYear();var w=Math.ceil(((d-Date.UTC(y,0,1))/864e5+1)/7);return {y:y,w:w,key:y*100+w};}
+  function weekMonday(a){var d=new Date(Date.UTC(a[0],a[1]-1,a[2]));var day=d.getUTCDay()||7;d.setUTCDate(d.getUTCDate()-day+1);return d;}
+  function signed(v){return (v>0?"+":v<0?"−":"")+eur.format(Math.abs(v));}
+  function cls(v){return v>0?"pos":v<0?"neg":"";}
+
+  var nowSec=Math.floor(Date.now()/1000);
+  var curWeek=isoWeek(ymd(nowSec)).key;
+  var weeks={};
+  (D.trades||[]).forEach(function(t){
+    var a=ymd(t.close_utc), wk=isoWeek(a);
+    var W=weeks[wk.key]||(weeks[wk.key]={key:wk.key,w:wk.w,mon:weekMonday(a),win:0,loss:0,net:0});
+    if(t.net>0)W.win++; else if(t.net<0)W.loss++;
+    W.net+=t.net;
+  });
+  var cw=weeks[curWeek]||{win:0,loss:0,net:0};
+  document.getElementById("w-win").textContent=cw.win;
+  document.getElementById("w-loss").textContent=cw.loss;
+  var tot=cw.win+cw.loss;
+  document.getElementById("w-rate").textContent= tot? Math.round(100*cw.win/tot)+"%" : "–";
+  document.getElementById("w-bar").style.width = tot? (100*cw.win/tot)+"%" : "0%";
+  if(!tot) document.getElementById("w-bar").parentNode.style.background="var(--band-line)";
+  var netEl=document.getElementById("w-net"); netEl.textContent=signed(cw.net);
+  netEl.style.color = cw.net>0?"var(--band-win)":cw.net<0?"var(--band-loss)":"var(--band-ink)";
+  if(D.export_utc>0) document.getElementById("upd").textContent="bijgewerkt "+fmtShow.format(new Date(D.export_utc*1000));
+
+  var ol=document.getElementById("open-list"), op=D.open||[];
+  document.getElementById("open-title").textContent="Open posities: "+op.length;
+  op.slice(0,6).forEach(function(o){
+    var r=document.createElement("div"); r.className="row";
+    var a=document.createElement("span"); a.textContent=(o.dir==="BUY"?"Buy":"Sell")+" "+String(o.volume).replace(".",",")+" · "+fmtShow.format(new Date(o.open_utc*1000));
+    var b=document.createElement("span"); b.textContent=signed(o.net_now); b.style.color=o.net_now>0?"var(--band-win)":o.net_now<0?"var(--band-loss)":"var(--band-muted)";
+    r.appendChild(a); r.appendChild(b); ol.appendChild(r);
+  });
+
+  var keys=Object.keys(weeks).map(Number).sort(function(a,b){return b-a}).slice(0,8);
+  if(keys.length){
+    var wb=document.getElementById("weeks-body"); wb.textContent="";
+    var dm=new Intl.DateTimeFormat("nl-NL",{day:"numeric",month:"short",timeZone:"UTC"});
+    keys.forEach(function(k){
+      var W=weeks[k], tr=document.createElement("tr");
+      var c1=document.createElement("td"); c1.textContent="Wk "+W.w+" · "+dm.format(W.mon)+(k===curWeek?" (nu)":"");
+      var c2=document.createElement("td"); c2.className="mono pos"; c2.textContent=W.win;
+      var c3=document.createElement("td"); c3.className="mono neg"; c3.textContent=W.loss;
+      var c4=document.createElement("td"); c4.className="mono "+cls(W.net); c4.textContent=signed(W.net);
+      [c1,c2,c3,c4].forEach(function(c){tr.appendChild(c)}); wb.appendChild(tr);
+    });
+  }
+  var last=(D.trades||[]).slice().sort(function(a,b){return b.close_utc-a.close_utc}).slice(0,10);
+  if(last.length){
+    var lb=document.getElementById("last-body"); lb.textContent="";
+    last.forEach(function(t){
+      var tr=document.createElement("tr");
+      var c1=document.createElement("td"); c1.className="mono"; c1.textContent=fmtShow.format(new Date(t.close_utc*1000));
+      var c2=document.createElement("td"); var p=document.createElement("span"); p.className="pill "+(t.dir==="BUY"?"buy":"sell"); p.textContent=t.dir==="BUY"?"Buy":"Sell"; c2.appendChild(p);
+      var c3=document.createElement("td"); c3.className="mono "+cls(t.net); c3.textContent=signed(t.net);
+      [c1,c2,c3].forEach(function(c){tr.appendChild(c)}); lb.appendChild(tr);
+    });
+  }
+
+  /* ---------- copy ---------- */
+  var btn=document.getElementById("copy"), tg=document.getElementById("tg");
+  btn.addEventListener("click",function(){
+    function sel(){var r=document.createRange();r.selectNodeContents(tg);var s=getSelection();s.removeAllRanges();s.addRange(r);}
+    try{ navigator.clipboard.writeText(tg.textContent).then(function(){btn.textContent="Gekopieerd";setTimeout(function(){btn.textContent="Kopieer"},1500)},sel); }catch(e){sel();}
+  });
+})();
+</script>
+
+</body>
+</html>
