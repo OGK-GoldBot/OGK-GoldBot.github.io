@@ -238,6 +238,9 @@ footer p{max-width:none}
         <span class="k small">Resultaat deze week</span>
         <span style="display:flex;flex-direction:column;align-items:flex-end"><span class="big" id="w-net">0,0%</span><span class="small" id="w-eur">= €0,00 op een normaal account van €10.000</span></span>
       </div>
+      <div class="open" style="gap:4px">
+        <span class="small" style="color:var(--band-ink)" id="today-line">Vandaag: nog geen gesloten trades</span>
+      </div>
       <div class="open">
         <span class="small" id="open-title">Open posities: 0</span>
         <div id="open-list"></div>
@@ -446,6 +449,16 @@ footer p{max-width:none}
   netEl.style.color = cw.net>0?"var(--band-win)":cw.net<0?"var(--band-loss)":"var(--band-ink)";
   if(D.export_utc>0) document.getElementById("upd").textContent="bijgewerkt "+fmtShow.format(new Date(D.export_utc*1000));
 
+  /* vandaag: gesloten trades van vandaag + wat er nog open staat */
+  (function(){
+    var td=ymd(nowSec).join("-"), w=0,l=0,n=0;
+    (D.trades||[]).forEach(function(t){ if(ymd(t.close_utc).join("-")===td){ n+=t.net; if(t.net>0)w++; else if(t.net<0)l++; } });
+    var el=document.getElementById("today-line"), dn=new Date(nowSec*1000).toLocaleDateString("nl-NL",{timeZone:TZ,weekday:"long"});
+    var opn=(D.open||[]), fl=0; opn.forEach(function(o){fl+=o.net_now;});
+    var txt = (w+l) ? ("Vandaag ("+dn+"): "+w+" winst · "+l+" verlies · "+pct(n)) : ("Vandaag ("+dn+"): nog geen gesloten trades");
+    if(opn.length) txt += " · nog "+opn.length+" open ("+pct(fl)+" zwevend)";
+    el.textContent=txt;
+  })();
   var ol=document.getElementById("open-list"), op=D.open||[];
   document.getElementById("open-title").textContent="Open posities: "+op.length;
   op.slice(0,6).forEach(function(o){
