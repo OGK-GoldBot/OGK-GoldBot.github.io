@@ -523,20 +523,33 @@ footer p{max-width:none}
     }
     /* robot-gezichtje: werk = posities open, blij/verdrietig = laatste trade van vandaag, lach = venster open, knipoog = dicht */
     var FACES={};try{FACES=JSON.parse(document.getElementById("ogk-faces").textContent)||{};}catch(e){}
+    /* face.json wordt door de pc elke 2 minuten bijgewerkt (alleen op ogk-goldbot.github.io) */
+    var FACE=null, lastUpd=null;
+    function getFace(){
+      if(!window.fetch || location.protocol.indexOf("http")!==0) return;
+      fetch("face.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(j){
+        if(j && typeof j.open==="number"){ FACE=j; if(lastUpd) lastUpd(); }
+      }).catch(function(){});
+    }
+    getFace(); setInterval(getFace,120000);
     function robotFace(open){
       var img=document.getElementById("robot-face"); if(!img||!FACES.lach) return;
       var k, t;
-      if((D.open||[]).length){ k="werk"; t="Aan het werk: er staan posities open"; }
+      var nOpen=(D.open||[]).length, last=0, sum=0;
+      (D.trades||[]).forEach(function(x){ if(x.close_utc>last) last=x.close_utc; });
+      (D.trades||[]).forEach(function(x){ if(last-x.close_utc<=120 && x.close_utc<=last) sum+=x.net; });
+      if(FACE){ nOpen=FACE.open; if(FACE.last_close_utc>=last){ last=FACE.last_close_utc; sum=FACE.last_net; } }
+      var td=ymd(Math.floor(Date.now()/1000)).join("-");
+      if(last && ymd(last).join("-")!==td) last=0;
+      if(nOpen){ k="werk"; t="Aan het werk: er staan posities open"; }
       else if(open){
-        var td=ymd(Math.floor(Date.now()/1000)).join("-"), last=0, sum=0;
-        (D.trades||[]).forEach(function(x){ if(ymd(x.close_utc).join("-")===td && x.close_utc>last) last=x.close_utc; });
-        if(last){ (D.trades||[]).forEach(function(x){ if(last-x.close_utc<=120 && x.close_utc<=last) sum+=x.net; });
+        if(last){
           k = sum>0 ? "blij" : sum<0 ? "verdrietig" : "lach"; t = sum>0 ? "Laatste trade gewonnen" : sum<0 ? "Laatste trade verloren" : "Klaar voor de volgende trade"; }
         else { k="lach"; t="Venster open: wacht op een goede trade"; }
       } else { k="knipoog"; t="Buiten het handelsvenster: even rust"; }
       if(img.getAttribute("data-face")!==k){ img.src=FACES[k]; img.setAttribute("data-face",k); img.alt="OGK.GoldBot robot: "+t; img.title=t; }
     }
-    upd(); setInterval(upd,30000);
+    lastUpd=upd; upd(); setInterval(upd,30000);
   })();
 
   /* ---------- copy ---------- */
