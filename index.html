@@ -517,7 +517,9 @@ footer p{max-width:none}
     var w=document.createElement('div');w.className='tradingview-widget-container';w.style.height='100%';
     var i=document.createElement('div');i.className='tradingview-widget-container__widget';i.style.height='100%';w.appendChild(i);
     var sc=document.createElement('script');sc.src='https://s3.tradingview.com/external-embedding/'+file;sc.async=true;sc.textContent=JSON.stringify(cfg);w.appendChild(sc);el.appendChild(w);}
-  tv('tv-gold','embed-widget-mini-symbol-overview.js',{symbol:'OANDA:XAUUSD',width:'100%',height:'100%',locale:'nl_NL',dateRange:'1D',colorTheme:'dark',isTransparent:true,autosize:true,largeChartUrl:''});
+  var wdNL=new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Amsterdam',weekday:'short'}).format(new Date());
+  var weekend=(wdNL==='Sat'||wdNL==='Sun');   // weekend: markt dicht, dan de afgelopen 5 dagen tonen
+  tv('tv-gold','embed-widget-mini-symbol-overview.js',{symbol:'OANDA:XAUUSD',width:'100%',height:'100%',locale:'nl_NL',dateRange:weekend?'5D':'1D',colorTheme:'dark',theme:'dark',isTransparent:false,autosize:true,largeChartUrl:'',trendLineColor:'rgba(227,182,96,1)',underLineColor:'rgba(227,182,96,0.25)',underLineBottomColor:'rgba(227,182,96,0)'});
   var D={};try{D=JSON.parse(document.getElementById('ogk-data').textContent)||{};}catch(e){}
   var ff=D.ff, ul=document.getElementById('ff-list'), now=Date.now();
   var ev=(ff&&ff.events||[]).map(function(e){return {d:new Date(e.t),e:e}}).filter(function(x){return !isNaN(x.d)});
