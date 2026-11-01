@@ -1,12 +1,4 @@
-<!doctype html>
-<html lang="nl">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="OGK.GoldBot: automatische goud-trader voor MetaTrader 5. Live weekscore, eerlijke backtest sinds 2018 en de risico's.">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-</head>
-<body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>OGK.GoldBot</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -142,6 +134,9 @@ section{display:flex;flex-direction:column;gap:20px}
 .ff .ev.past{opacity:.45}
 .ff .ev.next{background:color-mix(in srgb, var(--band-gold) 14%, transparent);border-radius:6px;padding-inline:4px}
 .ff .ev.next .tm{color:var(--band-gold)}
+.slight{border-color:color-mix(in srgb, var(--band-gold) 55%, var(--band-line))}
+.slight p{font-size:.85rem;line-height:1.45;color:var(--band-muted);max-width:none}
+.slight .tag{align-self:flex-start;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--band-gold);border:1px solid var(--band-gold);border-radius:999px;padding:2px 10px}
 .legend{display:flex;gap:12px;font-size:.72rem;color:var(--band-muted)}
 .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
 @media (max-width:820px){.sidewrap{grid-template-columns:1fr}}
@@ -152,7 +147,7 @@ section{display:flex;flex-direction:column;gap:20px}
   .side-r{right:calc(((100vw - 1008px) / 2 - 280px) / 2)}
   .side .robot{display:grid;grid-template-columns:auto 1fr;column-gap:12px;row-gap:2px;text-align:left;align-items:center}
   .side .robot img{grid-row:span 3;width:72px;height:72px}
-  .ff{max-height:calc(100vh - 170px)}
+  .ff{max-height:calc(100vh - 330px)}
 }
 
 table{width:100%;border-collapse:collapse}
@@ -304,6 +299,12 @@ footer p{max-width:none}
         <ul class="ff" id="ff-list" hidden></ul>
         <div class="tv-news" id="tv-news" hidden></div>
         <small>Rond groot nieuws (rente, banen, inflatie) kan goud hard bewegen. Tijden in Nederlandse tijd. Bron: <a href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener">Forex Factory</a>.</small>
+      </div>
+      <div class="sbox slight">
+        <span class="eyebrow">Binnenkort</span>
+        <h3>OGK Light</h3>
+        <p>Voor accounts vanaf €500. Nu in test op een demo-account.</p>
+        <span class="tag">In test</span>
       </div>
     </aside>
     </div>
@@ -590,5 +591,5 @@ footer p{max-width:none}
   document.getElementById('dag-text').textContent=item.text;
 })();
 </script>
-</body>
-</html>
+
+</body></html>
