@@ -525,9 +525,9 @@ footer p{max-width:none}
         var next = weekend||wd==="Fri" ? "maandag 11:00" : "morgen 11:00";
         tx.innerHTML="<b>No more trades</b> vandaag · weer open "+next;
       }
-      robotFace(!weekend && mins>=660 && mins<960);
+      robotFace(!weekend && h<23, !weekend && mins>=660 && mins<960); /* goudmarkt open: ma–vr 00:00–23:00 NL-tijd */
     }
-    /* robot-gezichtje: werk = posities open, blij/verdrietig = laatste trade van vandaag, lach = venster open, knipoog = dicht */
+    /* robot-gezichtje: werk = posities open, blij/verdrietig = laatste trade van vandaag, lach = markt open, knipoog = markt dicht */
     var FACES={};try{FACES=JSON.parse(document.getElementById("ogk-faces").textContent)||{};}catch(e){}
     /* face.json wordt door de pc elke 2 minuten bijgewerkt (alleen op ogk-goldbot.github.io) */
     var FACE=null, lastUpd=null;
@@ -538,7 +538,7 @@ footer p{max-width:none}
       }).catch(function(){});
     }
     getFace(); setInterval(getFace,120000);
-    function robotFace(open){
+    function robotFace(open, win){
       var img=document.getElementById("robot-face"); if(!img||!FACES.lach) return;
       var k, t;
       var nOpen=(D.open||[]).length, last=0, sum=0;
@@ -551,8 +551,8 @@ footer p{max-width:none}
       else if(open){
         if(last){
           k = sum>0 ? "blij" : sum<0 ? "verdrietig" : "lach"; t = sum>0 ? "Laatste trade gewonnen" : sum<0 ? "Laatste trade verloren" : "Klaar voor de volgende trade"; }
-        else { k="lach"; t="Venster open: wacht op een goede trade"; }
-      } else { k="knipoog"; t="Buiten het handelsvenster: even rust"; }
+        else { k="lach"; t=win?"Handelsvenster open: wacht op een goede trade":"Markt open: klaar voor 11:00"; }
+      } else { k="knipoog"; t="Markt dicht: even rust"; }
       if(img.getAttribute("data-face")!==k){ img.src=FACES[k]; img.setAttribute("data-face",k); img.alt="OGK.GoldBot robot: "+t; img.title=t; }
     }
     lastUpd=upd; upd(); setInterval(upd,30000);
