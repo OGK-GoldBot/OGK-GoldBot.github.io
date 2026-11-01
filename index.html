@@ -110,6 +110,17 @@ main .inner{padding-block:56px 64px;display:flex;flex-direction:column;gap:64px}
 section{display:flex;flex-direction:column;gap:20px}
 .card{background:var(--sheet);border:1px solid var(--line);border-radius:8px}
 .weeks{overflow-x:auto}
+
+/* dagelijkse les / mindset */
+.dag{display:grid;grid-template-columns:minmax(0,420px) 1fr;gap:28px;align-items:start;margin-top:20px}
+.dag img{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);display:block}
+.dag .txt{display:flex;flex-direction:column;gap:12px;min-width:0}
+.dag .tag{font-family:var(--f-mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.dag h3{font-size:1.5rem}
+.dag blockquote{font-family:var(--f-display);font-weight:700;font-size:1.4rem;line-height:1.25;margin:0;border-left:3px solid var(--gold);padding-left:14px}
+.dag p{white-space:pre-line;color:var(--muted)}
+.dag .soc{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+@media (max-width:820px){.dag{grid-template-columns:1fr}}
 /* zijpanelen: links robot + goud, rechts ForexFactory-nieuws. Breed scherm: vast in de lege randen. Smal: gewoon in de pagina */
 .sidewrap{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
 .side{display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -287,6 +298,26 @@ footer p{max-width:none}
       </div>
     </aside>
     </div>
+
+    <section aria-labelledby="t-dag">
+      <span class="eyebrow" id="dag-eyebrow">Elke dag iets nieuws</span>
+      <h2 id="t-dag">Leren traden</h2>
+      <div class="card dag" style="padding:18px">
+        <img id="dag-img" alt="" width="800" height="1000">
+        <div class="txt">
+          <span class="tag" id="dag-tag"></span>
+          <h3 id="dag-title"></h3>
+          <blockquote id="dag-quote" hidden></blockquote>
+          <p id="dag-text"></p>
+          <div class="soc">
+            <a class="btn ghost" href="https://www.facebook.com/share/19vYUHmB5z/" target="_blank" rel="noopener">Facebook</a>
+            <a class="btn ghost" href="https://www.tiktok.com/@ogk.goldbot" target="_blank" rel="noopener">TikTok</a>
+            <a class="btn ghost" href="https://t.me/OGKGoldBot" target="_blank" rel="noopener">Telegram</a>
+          </div>
+          <p class="meta" style="color:var(--muted)">Uitleg, geen financieel advies. Dinsdag en donderdag een les, de andere dagen een mindset-quote.</p>
+        </div>
+      </div>
+    </section>
 
     <section id="test" aria-labelledby="t-test">
       <span class="eyebrow">Backtest · 2 jan 2018 tot okt 2026 · start €10.000</span>
@@ -531,6 +562,31 @@ footer p{max-width:none}
     tv('tv-news','embed-widget-events.js',{colorTheme:'dark',isTransparent:true,width:'100%',height:'100%',locale:'nl_NL',importanceFilter:'0,1',countryFilter:'us'});
   }
   setTimeout(function(){var a=document.getElementById('st-txt'),b=document.getElementById('side-status');if(a&&b&&a.textContent.indexOf('geladen')<0)b.textContent=a.textContent;},300);
+})();
+</script>
+<script type="application/json" id="ogk-posts">{"les": [{"n": 1, "title": "De dubbele bodem (W)", "img": "posts/OGK_les_01_dubbele_bodem.webp", "text": "De prijs valt, stuitert omhoog, valt nog een keer… maar komt niet lager dan de eerste bodem. De verkopers krijgen de prijs er niet meer onder.\n\n✅ Bevestiging pas bij een slot BOVEN de nek (de weerstand tussen de twee bodems)\n❌ Breekt bodem 2? Dan is het patroon mislukt en valt de prijs vaak juist verder\n\nDe fout die veel mensen maken: al kopen bij de tweede bodem omdat ze \"zeker weten\" dat het de bodem is. Wachten op de bevestiging kost soms een stukje winst, maar bespaart vaak een verlies."}, {"n": 2, "title": "De dubbele top (M)", "img": "posts/OGK_les_02_dubbele_top.webp", "text": "Het spiegelbeeld van de dubbele bodem. De prijs stijgt, zakt terug, stijgt nog een keer… maar komt niet boven de eerste top. De kopers raken op.\n\n✅ Bevestiging pas bij een slot ONDER de nek\n❌ Gaat de prijs boven de toppen uit? Dan klopt het patroon niet meer\n\nGeen enkel patroon werkt altijd. Het geeft je alleen een plan: waar stap ik in, en waar zit ik fout."}, {"n": 3, "title": "Supply & demand: de base", "img": "posts/OGK_les_03_supply_demand.webp", "text": "Een \"base\" is een paar kleine candles waar de prijs even stilstaat, gevolgd door een harde beweging eruit. Daar zaten veel orders.\n\nDe 4 patronen:\n🟢 Drop-Base-Rally en Rally-Base-Rally → demand-zone (kopers)\n🔴 Rally-Base-Drop en Drop-Base-Drop → supply-zone (verkopers)\n\n✅ De EERSTE terugkomst naar de zone is meestal de sterkste\n\nEerlijk: wij hebben dit zelf als bot getest op 5-minuten candles en daar werkte het niet goed (te veel ruis). Op hogere tijdframes zijn zones betrouwbaarder. Dat testen we nu."}, {"n": 4, "title": "Weerstand wordt steun", "img": "posts/OGK_les_04_weerstand_wordt_steun.webp", "text": "Een niveau waar de prijs een paar keer wordt tegengehouden, noem je weerstand. Breekt de prijs er eindelijk doorheen, dan gebeurt er vaak iets moois: diezelfde lijn wordt steun.\n\n📍 De \"retest\" – de prijs komt van bovenaf terug naar de lijn – is een bekende instap\n\nWerkt ook andersom: steun die breekt, wordt vaak weerstand."}, {"n": 5, "title": "Wat is een trend?", "img": "posts/OGK_les_05_trend_hh_hl.webp", "text": "📈 Opwaartse trend = hogere toppen (HH) + hogere bodems (HL)\n📉 Neerwaartse trend = lagere toppen (LH) + lagere bodems (LL)\n\nZolang dat patroon doorgaat, loopt de trend. Breekt de prijs onder de laatste hogere bodem (HL)? Dan is de opwaartse trend in gevaar.\n\nOnze bot handelt alleen MET de trend mee. Tegen de trend in traden kan ook, maar is lastiger en riskanter."}, {"n": 6, "title": "Wat vertellen de EMA's?", "img": "posts/OGK_les_06_ema.webp", "text": "Een EMA (exponential moving average) is een gemiddelde prijs, waarbij de laatste candles zwaarder meetellen.\n\n🔵 Snelle EMA boven de trage → de markt gaat omhoog\n🔴 Snelle EMA onder de trage → de markt gaat omlaag\n✖️ Een kruising kan een trendwissel aankondigen\n\nEerlijk: EMA's lopen altijd ACHTER de prijs aan. In een zijwaartse markt kruisen ze steeds heen en weer en geven ze veel valse signalen. Daarom gebruiken wij ze als filter, niet als enige reden om in te stappen."}, {"n": 7, "title": "Waarom altijd een stop loss?", "img": "posts/OGK_les_07_stop_loss.webp", "text": "Iedere trader zit soms fout. Ook de beste. De vraag is niet óf je verliest, maar hoeveel.\n\n🛑 Een stop loss sluit je trade automatisch op een vooraf gekozen verlies\n📏 Veel traders riskeren hooguit 1–2% van hun account per trade\n❌ De SL verplaatsen \"omdat hij vast wel terugkomt\" is een van de snelste manieren om je account leeg te maken\n\nBij OGK.GoldBot heeft elke positie vanaf de eerste seconde een harde stop."}, {"n": 8, "title": "Winrate is niet alles", "img": "posts/OGK_les_08_risk_reward.webp", "text": "Je kunt meer trades verliezen dan winnen… en toch winst maken.\n\nVoorbeeld met 1:2 (risico 1, winst 2):\n✅ 4 winst × +2 = +8\n❌ 6 verlies × −1 = −6\n➡️ Totaal: +2\n\nOmslagpunt = 1 ÷ (1 + RR)\n• 1:1 → je moet meer dan 50% winnen\n• 1:2 → meer dan 33%\n• 1:3 → meer dan 25%\n(plus de kosten zoals spread)\n\nMaar eerlijk: hoe verder je take profit, hoe minder vaak hij geraakt wordt. Een hoge RR is niet automatisch beter."}, {"n": 9, "title": "Goud en groot nieuws", "img": "posts/OGK_les_09_nieuws.webp", "text": "Bij groot Amerikaans nieuws – zoals de banencijfers (NFP), inflatie (CPI) en rentebesluiten (FOMC) – kan goud in seconden tientallen dollars bewegen.\n\n⚡ De spread wordt (veel) groter\n⚡ Je stop kan verder dan je SL worden uitgevoerd (slippage)\n⚡ Vaak eerst een schijnbeweging de ene kant op, dan de andere\n\nNiet handelen rond groot nieuws is ook een keuze. In ons Telegram-kanaal krijg je 15 minuten van tevoren een waarschuwing."}, {"n": 10, "title": "Backtest ≠ garantie", "img": "posts/OGK_les_10_backtest_vs_live.webp", "text": "Een backtest laat zien hoe regels het op OUDE koersen gedaan zouden hebben. Handig om te testen, maar het is geen belofte.\n\nWaarom live meestal slechter is:\n• spread en commissie\n• slippage (vooral bij nieuws)\n• de markt verandert\n• een bot kan \"te goed\" passen op het verleden (overfitting)\n\nDaarom laten wij allebei zien: de backtest sinds 2018 én elke week de echte live uitslag – ook als die tegenvalt."}], "quote": [{"n": 1, "title": "Discipline", "quote": "Een goede trade is een trade waarbij je je plan hebt gevolgd. Ook als hij verliest.", "img": "posts/OGK_quote_01.webp", "text": "Winst of verlies zegt weinig over één trade. Heb je je regels gevolgd? Dan was het een goede trade."}, {"n": 2, "title": "Geduld", "quote": "De markt is morgen ook open.", "img": "posts/OGK_quote_02.webp", "text": "FOMO kost meer geld dan gemiste kansen. Er komt altijd een nieuwe setup."}, {"n": 3, "title": "Geduld", "quote": "Geen trade is ook een positie.", "img": "posts/OGK_quote_03.webp", "text": "Niet traden als het niet duidelijk is, is óók een beslissing. Vaak de beste."}, {"n": 4, "title": "Risico", "quote": "Bescherm eerst je account. De winst komt daarna.", "img": "posts/OGK_quote_04.webp", "text": "Wie zijn account beschermt, blijft in het spel. Wie blijft spelen, krijgt kansen."}, {"n": 5, "title": "Risico", "quote": "Eén goede trade maakt je niet rijk. Eén slechte zonder stop kan je alles kosten.", "img": "posts/OGK_quote_05.webp", "text": "Altijd een stop loss. Geen uitzonderingen."}, {"n": 6, "title": "Risk/reward", "quote": "Je verdient niet aan gelijk hebben, maar aan hoeveel je wint als je gelijk hebt en hoeveel je verliest als je fout zit.", "img": "posts/OGK_quote_06.webp", "text": "Winrate alleen zegt niks. Het gaat om de verhouding tussen je winsten en je verliezen."}, {"n": 7, "title": "Mindset", "quote": "Verlies is leergeld. Zolang je ervan leert.", "img": "posts/OGK_quote_07.webp", "text": "Elke verliestrade vertelt iets. Schrijf op wat er gebeurde en waarom."}, {"n": 8, "title": "Emotie", "quote": "Wraak-traden is de duurste emotie in de markt.", "img": "posts/OGK_quote_08.webp", "text": "Na een verlies meteen terug willen winnen? Even pauze. Wraak-traden maakt van één verlies vaak drie."}, {"n": 9, "title": "Trend", "quote": "De trend is je vriend. Tot hij stopt.", "img": "posts/OGK_quote_09.webp", "text": "Met de trend mee traden werkt, tot de trend draait. Daarom altijd een stop."}, {"n": 10, "title": "Discipline", "quote": "Plan je trade. Trade je plan.", "img": "posts/OGK_quote_10.webp", "text": "Weet vóór je instapt: waar stap ik in, waar zit ik fout, waar neem ik winst?"}, {"n": 11, "title": "Geduld", "quote": "De markt betaalt voor geduld, niet voor drukte.", "img": "posts/OGK_quote_11.webp", "text": "Elke dag traden is geen must. Wachten op de juiste setup wel."}, {"n": 12, "title": "Mindset", "quote": "Klein beginnen is geen zwakte. Het is slim.", "img": "posts/OGK_quote_12.webp", "text": "Een klein account of een demo is de goedkoopste school die er is."}, {"n": 13, "title": "Risico", "quote": "Een stop loss is geen verlies. Het is de prijs van een kans.", "img": "posts/OGK_quote_13.webp", "text": "Je betaalt een klein bedrag om te ontdekken of je gelijk had. Dat is de stop loss."}, {"n": 14, "title": "Discipline", "quote": "Niemand weet wat de markt gaat doen. Daarom heb je regels nodig.", "img": "posts/OGK_quote_14.webp", "text": "Niemand kan de markt voorspellen. Regels zorgen dat je niet afhankelijk bent van je gevoel."}, {"n": 15, "title": "Mindset", "quote": "Consistentie verslaat geluk. Elke keer.", "img": "posts/OGK_quote_15.webp", "text": "Eén geluksweek zegt niks. Maanden van dezelfde aanpak wel."}, {"n": 16, "title": "Emotie", "quote": "Hoe groter je lot, hoe kleiner je geduld. Pas op.", "img": "posts/OGK_quote_16.webp", "text": "Te groot traden maakt nerveus, en nerveuze traders maken fouten. Houd je risico klein."}, {"n": 17, "title": "Groei", "quote": "Schrijf je trades op. Je journal is je beste leraar.", "img": "posts/OGK_quote_17.webp", "text": "Datum, instap, reden, uitslag, gevoel. Wie zijn trades opschrijft, ziet zijn eigen patronen."}, {"n": 18, "title": "Mindset", "quote": "Snel rijk bestaat niet. Langzaam en slim wel.", "img": "posts/OGK_quote_18.webp", "text": "Wie belooft dat je snel rijk wordt, verkoopt meestal iets. Wees kritisch."}, {"n": 19, "title": "Statistiek", "quote": "Een slechte week is geen slecht systeem. Kijk naar honderden trades, niet naar één.", "img": "posts/OGK_quote_19.webp", "text": "Elk systeem heeft slechte weken. Beoordeel een strategie op honderden trades, niet op één week."}, {"n": 20, "title": "Eerlijk", "quote": "Eerlijk naar je resultaten kijken is de eerste stap naar beter worden.", "img": "posts/OGK_quote_20.webp", "text": "Daarom laten wij elke week de echte uitslag zien. Ook als hij tegenvalt."}]}</script>
+<script>
+(function(){
+  var P; try{P=JSON.parse(document.getElementById('ogk-posts').textContent);}catch(e){return;}
+  // datum in Nederlandse tijd
+  var f=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Amsterdam',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  var today=new Date(f+'T12:00:00Z'), start=new Date('2026-11-02T12:00:00Z');   // maandag 2 nov = dag 0
+  var days=Math.floor((today-start)/86400000);
+  function isLes(d){ var wd=(d%7+7)%7; return wd===1||wd===3; }                // 0=ma: di=1, do=3
+  var les=0, q=0;
+  for(var d=0; d<days; d++){ if(isLes(d)) les++; else q++; }
+  var item, isL = days>=0 && isLes(days);
+  if(days<0){ item=P.quote[0]; }
+  else if(isL){ item=P.les[les % P.les.length]; }
+  else { item=P.quote[q % P.quote.length]; }
+  var dagNaam=new Intl.DateTimeFormat('nl-NL',{timeZone:'Europe/Amsterdam',weekday:'long',day:'numeric',month:'long'}).format(new Date());
+  document.getElementById('dag-eyebrow').textContent='Vandaag · '+dagNaam;
+  document.getElementById('dag-img').src=item.img;
+  document.getElementById('dag-img').alt=isL?('Les: '+item.title):('Quote: '+item.quote);
+  document.getElementById('dag-tag').textContent=isL?('Les #'+item.n):('Mindset #'+item.n+' · '+item.title);
+  document.getElementById('dag-title').textContent=isL?item.title:'Trading mindset';
+  if(!isL){ var bq=document.getElementById('dag-quote'); bq.textContent='“'+item.quote+'”'; bq.hidden=false; }
+  document.getElementById('dag-text').textContent=item.text;
 })();
 </script>
 </body>
