@@ -452,8 +452,14 @@ footer p{max-width:none}
   document.getElementById("w-rate").textContent= tot? Math.round(100*cw.win/tot)+"%" : "–";
   document.getElementById("w-bar").style.width = tot? (100*cw.win/tot)+"%" : "0%";
   if(!tot) document.getElementById("w-bar").parentNode.style.background="var(--band-line)";
+  /* nieuwe week nog leeg: laat de vorige week zien */
+  var pk=Object.keys(weeks).map(Number).filter(function(k){return k<curWeek}).sort(function(a,b){return b-a})[0];
+  var prevW=pk?weeks[pk]:null;
   var netEl=document.getElementById("w-net"); netEl.textContent=pct(cw.net);
   document.getElementById("w-eur").textContent="= "+signed(cw.net)+" op een normaal account van €10.000";
+  if(!tot && prevW && (prevW.win+prevW.loss)){
+    document.getElementById("w-eur").innerHTML="Nieuwe week · <b>vorige week (wk "+prevW.w+"): "+pct(prevW.net)+"</b> · "+prevW.win+" winst · "+prevW.loss+" verlies";
+  }
   netEl.style.color = cw.net>0?"var(--band-win)":cw.net<0?"var(--band-loss)":"var(--band-ink)";
   if(D.export_utc>0) document.getElementById("upd").textContent="bijgewerkt "+fmtShow.format(new Date(D.export_utc*1000));
 
