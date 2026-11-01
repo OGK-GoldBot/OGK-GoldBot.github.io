@@ -136,6 +136,8 @@ section{display:flex;flex-direction:column;gap:20px}
 .ff .ev.next .tm{color:var(--band-gold)}
 .slight{border-color:color-mix(in srgb, var(--band-gold) 55%, var(--band-line))}
 .slight p{font-size:.85rem;line-height:1.45;color:var(--band-muted);max-width:none}
+.slight .ann{display:flex;flex-direction:column;gap:6px}
+.slight .ann+.ann{border-top:1px solid var(--band-line);padding-top:10px}
 .slight .tag{align-self:flex-start;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--band-gold);border:1px solid var(--band-gold);border-radius:999px;padding:2px 10px}
 .legend{display:flex;gap:12px;font-size:.72rem;color:var(--band-muted)}
 .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
@@ -292,6 +294,14 @@ footer p{max-width:none}
       </div>
     </aside>
     <aside class="side side-r" aria-label="Nieuws van deze week">
+      <div class="sbox slight" id="aankondigingen">
+        <span class="eyebrow">Aankondigingen</span>
+        <div class="ann">
+          <h3>OGK Light</h3>
+          <p>Binnenkort: OGK Light, voor accounts vanaf €500. Nu in test op een demo-account.</p>
+          <span class="tag">In test</span>
+        </div>
+      </div>
       <div class="sbox">
         <span class="eyebrow">Nieuws · Forex Factory</span>
         <h3>USD-nieuws deze week</h3>
@@ -299,12 +309,6 @@ footer p{max-width:none}
         <ul class="ff" id="ff-list" hidden></ul>
         <div class="tv-news" id="tv-news" hidden></div>
         <small>Rond groot nieuws (rente, banen, inflatie) kan goud hard bewegen. Tijden in Nederlandse tijd. Bron: <a href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener">Forex Factory</a>.</small>
-      </div>
-      <div class="sbox slight">
-        <span class="eyebrow">Aankondiging</span>
-        <h3>OGK Light</h3>
-        <p>Binnenkort: OGK Light, voor accounts vanaf €500. Nu in test op een demo-account.</p>
-        <span class="tag">In test</span>
       </div>
     </aside>
     </div>
