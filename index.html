@@ -712,7 +712,7 @@ footer p{max-width:none}
           k = sum>0 ? "blij" : sum<0 ? "verdrietig" : "lach"; t = sum>0 ? "Laatste trade gewonnen" : sum<0 ? "Laatste trade verloren" : "Klaar voor de volgende trade"; }
         else { k="lach"; t=win?"Handelsvenster open: wacht op een goede trade":"Markt open: klaar voor 11:00"; }
       } else { k="knipoog"; t="Markt dicht: even rust"; }
-      if(img.getAttribute("data-face")!==k){ img.src=FACES[k]; img.setAttribute("data-face",k); img.alt="OGK.GoldBot robot: "+t; img.title=t; }
+      [img, document.querySelector(".hero .brand img.avatar")].forEach(function(im){ if(im && im.getAttribute("data-face")!==k){ im.src=FACES[k]; im.setAttribute("data-face",k); im.alt="OGK.GoldBot robot: "+t; im.title=t; } }); /* ook het grote logo bovenaan (telefoon) */
     }
     lastUpd=upd; upd(); setInterval(upd,30000);
   })();
