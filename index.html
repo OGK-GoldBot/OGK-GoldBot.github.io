@@ -244,7 +244,14 @@ td.mono,td .mono{font-family:var(--f-mono)}
 .stat .s{font-size:.8rem;color:var(--muted)}
 .meta{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
 .chartbox{padding:18px;overflow-x:auto}
-.chartbox svg{display:block;width:100%;min-width:560px;height:auto}
+.chartbox svg{display:block;width:100%;min-width:480px;height:auto}
+.testgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:20px;align-items:stretch}
+.kort{padding:18px;display:flex;flex-direction:column;gap:10px}
+.kort .krow{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding-bottom:8px;font-size:.92rem}
+.kort .krow span{color:var(--muted)} .kort .krow b{font-family:var(--f-mono);font-weight:500;text-align:right}
+.kort p{font-size:.88rem;color:var(--muted);line-height:1.5;margin-top:4px}
+.testgrid .chartbox{display:flex;align-items:center}
+@media (max-width:820px){.testgrid{grid-template-columns:1fr}.testgrid .chartbox{order:-1}}
 .note{border-left:3px solid var(--gold);background:var(--gold-soft);padding:12px 16px;border-radius:0 6px 6px 0;max-width:none}
 
 .grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
@@ -397,23 +404,33 @@ footer p{max-width:none}
         <div class="stat"><span class="k">Grootste daling</span><span class="v neg">−€3.868</span><span class="s">18,7% van de top · zwaarste in %: 23,7%</span></div>
         <div class="stat"><span class="k">Posities</span><span class="v">3.496</span><span class="s">31% verliezend · winstfactor 1,56</span></div>
       </div>
-      <div class="card chartbox" aria-label="Resultaat per jaar in euro">
-        <svg viewBox="0 0 900 300" role="img">
-          <g font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)">
-            <line x1="60" y1="20" x2="890" y2="20" stroke="var(--line)"/>
-            <line x1="60" y1="96" x2="890" y2="96" stroke="var(--line)"/>
-            <line x1="60" y1="172" x2="890" y2="172" stroke="var(--line)"/>
-            <line x1="60" y1="248" x2="890" y2="248" stroke="var(--ink)"/>
-            <text x="52" y="24" text-anchor="end">10.000</text>
-            <text x="52" y="100" text-anchor="end">6.667</text>
-            <text x="52" y="176" text-anchor="end">3.333</text>
-            <text x="52" y="252" text-anchor="end">0</text>
+      <div class="testgrid">
+        <div class="card kort">
+          <span class="eyebrow">In het kort</span>
+          <div class="krow"><span>Jaren in winst</span><b class="pos">7 van 9</b></div>
+          <div class="krow"><span>Beste jaar</span><b class="pos">2026* · +€9.125</b></div>
+          <div class="krow"><span>Slechtste jaar</span><b class="neg">2021 · −€500</b></div>
+          <div class="krow"><span>2018–2024 (7 jaar)</span><b>+€7.781</b></div>
+          <p>De meeste winst komt uit 2025 en 2026, toen goud een sterke trend had. In 2020 en 2021 verloor de bot geld, en in 2024 was de winst klein. Zo werkt een trendvolger: in een trend verdient hij, in een zijwaartse markt verliest hij een beetje.</p>
+        </div>
+        <div class="card chartbox" aria-label="Resultaat per jaar in euro">
+        <svg viewBox="0 0 900 312" role="img">
+          <g font-family="IBM Plex Mono, monospace" font-size="17" fill="var(--muted)">
+            <line x1="86" y1="20" x2="890" y2="20" stroke="var(--line)"/>
+            <line x1="86" y1="96" x2="890" y2="96" stroke="var(--line)"/>
+            <line x1="86" y1="172" x2="890" y2="172" stroke="var(--line)"/>
+            <line x1="86" y1="248" x2="890" y2="248" stroke="var(--ink)"/>
+            <text x="78" y="26" text-anchor="end">10.000</text>
+            <text x="78" y="102" text-anchor="end">6.667</text>
+            <text x="78" y="178" text-anchor="end">3.333</text>
+            <text x="78" y="254" text-anchor="end">0</text>
           </g>
           <g id="bars"></g>
         </svg>
       </div>
+      </div>
       <p class="meta">MT5 strategietester · RoboForex-data · XAUUSD M5 · model 1-minuut OHLC · hefboom 1:100 · start €10.000</p>
-      <p class="note">De meeste winst komt uit 2025 en 2026, toen goud een sterke trend had. In 2020 en 2021 verloor de bot geld, en in 2024 was de winst klein. Zo werkt een trendvolger: in een trend verdient hij, in een zijwaartse markt verliest hij een beetje.</p>
+
     </section>
 
     <section aria-labelledby="t-hours">
@@ -478,9 +495,9 @@ footer p{max-width:none}
   /* ---------- backtest bars ---------- */
   var data=[["2018",1846],["2019",1405],["2020",-358],["2021",-500],["2022",2712],["2023",2239],["2024",437],["2025",8805],["2026*",9125]];
   var g=document.getElementById("bars"), ns="http://www.w3.org/2000/svg";
-  var x0=60,x1=890,base=248,top=20,max=10000;
+  var x0=86,x1=890,base=248,top=30,max=10000;
   var scale=(base-top)/max, slot=(x1-x0)/data.length, w=slot*0.56;
-  function txt(x,y,s,fill,anchor,size){var t=document.createElementNS(ns,"text");t.setAttribute("x",x);t.setAttribute("y",y);t.setAttribute("text-anchor",anchor||"middle");t.setAttribute("font-family","IBM Plex Mono, monospace");t.setAttribute("font-size",size||"12");t.setAttribute("fill",fill);t.textContent=s;g.appendChild(t);}
+  function txt(x,y,s,fill,anchor,size){var t=document.createElementNS(ns,"text");t.setAttribute("x",x);t.setAttribute("y",y);t.setAttribute("text-anchor",anchor||"middle");t.setAttribute("font-family","IBM Plex Mono, monospace");t.setAttribute("font-size",size||"17");t.setAttribute("fill",fill);t.textContent=s;g.appendChild(t);}
   data.forEach(function(d,i){
     var v=d[1], h=Math.abs(v)*scale, x=x0+slot*i+(slot-w)/2;
     var r=document.createElementNS(ns,"rect");
@@ -488,10 +505,10 @@ footer p{max-width:none}
     r.setAttribute("y", v>=0 ? base-h : base); r.setAttribute("height", Math.max(h,1.5));
     r.setAttribute("fill", v>=0 ? "var(--win)" : "var(--loss)"); r.setAttribute("rx",2);
     g.appendChild(r);
-    txt(x+w/2, v>=0 ? base-h-6 : base+h+14, (v>0?"+":"−")+Math.abs(v).toLocaleString("nl-NL"), "var(--ink)");
-    txt(x+w/2, 292, d[0], "var(--muted)");
+    txt(x+w/2, v>=0 ? base-h-7 : base+h+19, (v>0?"+":"−")+Math.abs(v).toLocaleString("nl-NL"), "var(--ink)");
+    txt(x+w/2, 306, d[0], "var(--muted)");
   });
-  txt(890,14,"euro per jaar · *2026 tot oktober","var(--muted)","end","11");
+  txt(890,16,"euro per jaar · *2026 tot oktober","var(--muted)","end","15");
 
   /* ---------- live week score ---------- */
   var D={trades:[],open:[],export_utc:0};
