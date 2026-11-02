@@ -12,11 +12,13 @@
     <div class="arch-top"><h2 id="arch-t">📂 Archief</h2><button class="arch-x" type="button" id="arch-x" aria-label="Sluiten">✕</button></div>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" type="button" id="tab-trades" aria-selected="true">Trades per week</button>
-      <button class="tab" role="tab" type="button" id="tab-posts" aria-selected="false">Lessen &amp; quotes</button>
+      <button class="tab" role="tab" type="button" id="tab-les" aria-selected="false">Lessen</button>
+      <button class="tab" role="tab" type="button" id="tab-quote" aria-selected="false">Quotes</button>
     </div>
     <div class="arch-body">
       <div id="pane-trades"><p class="arch-note">Alle weken, ook de slechte. Klik op een week voor elke trade. Tijden in Nederlandse tijd · bedragen op een normaal account van €10.000 met 0,01 lot.</p><div id="arch-weeks"></div></div>
-      <div id="pane-posts" hidden><p class="arch-note">Alles wat al op de pagina stond, nieuwste bovenaan.</p><div class="posts" id="arch-posts"></div></div>
+      <div id="pane-les" hidden><p class="arch-note">Alle lessen die al op de site stonden, nieuwste bovenaan.</p><div class="posts" id="arch-les"></div></div>
+      <div id="pane-quote" hidden><p class="arch-note">Alle mindset-quotes die al op de site stonden, nieuwste bovenaan.</p><div class="posts" id="arch-quote"></div></div>
     </div>
   </div>
 </div>
@@ -188,7 +190,8 @@ td.mono,td .mono{font-family:var(--f-mono)}
 .empty{padding:22px 16px;color:var(--muted)}
 
 /* archief-venster */
-.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.sec-head{display:flex;justify-content:flex-start;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.sec-head .arch-btn{margin-bottom:2px}
 .btn.arch-btn{background:var(--sheet);color:var(--ink);border:1px solid var(--line)}
 .btn.arch-btn:hover{border-color:var(--gold)}
 .weeks-scroll{max-height:440px;overflow:auto}
@@ -225,6 +228,8 @@ td.mono,td .mono{font-family:var(--f-mono)}
 .post h4{font-size:.95rem}
 .post details{font-size:.82rem;color:var(--muted)} .post summary{cursor:pointer;color:var(--ink)}
 .post p{white-space:pre-line;margin-top:6px}
+@media (max-width:600px){.posts{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.post h4{font-size:.85rem}}
+.dag-links{display:flex;gap:14px;flex-wrap:wrap}
 .dag-more{font-size:.8rem;color:var(--band-gold);background:none;border:0;padding:0;cursor:pointer;text-align:left;text-decoration:underline;font:inherit;font-size:.8rem}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .two > *{min-width:0}
@@ -357,7 +362,7 @@ footer p{max-width:none}
         <h3 id="dag-title"></h3>
         <blockquote id="dag-quote" hidden></blockquote>
         <p id="dag-text"></p>
-        <button class="dag-more" type="button" data-arch="posts">Alle lessen &amp; quotes →</button>
+        <span class="dag-links"><button class="dag-more" type="button" data-arch="les">Alle lessen →</button> <button class="dag-more" type="button" data-arch="quote">Alle quotes →</button></span>
         <small>Elke dag nieuw: di een les, do OGK.GoldBot, andere dagen een quote. Geen financieel advies.</small>
       </div>
     </aside>
@@ -605,10 +610,11 @@ footer p{max-width:none}
         tb.appendChild(body); tw.appendChild(tb); d.appendChild(tw); box.appendChild(d);
       });
     }
-    function buildPosts(){
-      var box=document.getElementById("arch-posts"); box.textContent="";
-      var H=window.__ogkPostsHist||[];
-      if(!H.length){ box.appendChild(el("p","arch-note","Nog niks gepost.")); return; }
+    function buildPosts(){ buildKind("les"); buildKind("quote"); }
+    function buildKind(kind){
+      var box=document.getElementById("arch-"+kind); box.textContent="";
+      var H=(window.__ogkPostsHist||[]).filter(function(h){return h.k===kind});
+      if(!H.length){ box.appendChild(el("p","arch-note",kind==="les"?"Nog geen lessen gepost. Elke dinsdag komt er een nieuwe.":"Nog geen quotes gepost.")); return; }
       H.slice().reverse().forEach(function(h){
         var c=el("div","post"), im=el("img"); im.loading="lazy"; im.src=h.item.img; im.alt=h.k==="quote"?("Quote: "+(h.item.quote||"")):h.item.title; c.appendChild(im);
         var dv=el("div"); dv.appendChild(el("span","tg",h.datum+" · "+(h.k==="les"?"Les #"+h.item.n:(h.k==="promo"?"OGK.GoldBot":"Mindset #"+h.item.n))));
@@ -618,9 +624,10 @@ footer p{max-width:none}
       });
     }
     function tab(which){
-      var t=which==="posts";
-      document.getElementById("tab-trades").setAttribute("aria-selected",!t); document.getElementById("tab-posts").setAttribute("aria-selected",t);
-      document.getElementById("pane-trades").hidden=t; document.getElementById("pane-posts").hidden=!t;
+      ["trades","les","quote"].forEach(function(n){
+        document.getElementById("tab-"+n).setAttribute("aria-selected",n===which);
+        document.getElementById("pane-"+n).hidden=(n!==which);
+      });
     }
     function open(which,week){
       if(!built){ buildWeeks(); buildPosts(); built=true; }
@@ -637,7 +644,7 @@ footer p{max-width:none}
     bg.addEventListener("click",function(e){ if(e.target===bg) close(); });
     document.addEventListener("keydown",function(e){ if(e.key==="Escape"&&bg.classList.contains("open")) close(); });
     document.getElementById("tab-trades").addEventListener("click",function(){tab("trades")});
-    document.getElementById("tab-posts").addEventListener("click",function(){ if(!built){buildWeeks();buildPosts();built=true;} tab("posts")});
+    ["les","quote"].forEach(function(n){ document.getElementById("tab-"+n).addEventListener("click",function(){ if(!built){buildWeeks();buildPosts();built=true;} tab(n)}); });
   })();
 
   /* ---------- handelstijd-status ---------- */
