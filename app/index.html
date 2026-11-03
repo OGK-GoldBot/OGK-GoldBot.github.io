@@ -1,0 +1,63 @@
+<!doctype html><html lang="nl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>OGK.GoldBot app</title><meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#0f1622">
+<style>
+:root{--bg:#0f1622;--card:#182233;--line:#2a364a;--ink:#eef1f6;--muted:#9aa6b8;--gold:#e3b660;--win:#55d39a;--loss:#ff7a6b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(700px 400px at 50% -10%,rgba(227,182,96,.2),transparent 60%),var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh;padding:max(18px,env(safe-area-inset-top)) 16px 28px}
+.top{display:flex;align-items:center;gap:14px;max-width:520px;margin:0 auto 18px}
+.top img{width:74px;height:74px;border-radius:50%;box-shadow:0 0 0 3px var(--gold),0 0 30px rgba(227,182,96,.35)}
+.top h1{margin:0;font-size:1.5rem}.top h1 span{color:var(--gold)}
+.st{font-size:.92rem;color:var(--muted);margin-top:2px}.st b{color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:520px;margin:0 auto}
+a.t{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;aspect-ratio:1;background:var(--card);border:1px solid var(--line);border-radius:20px;color:var(--ink);text-decoration:none;font-weight:600;font-size:.86rem;text-align:center;padding:8px;-webkit-tap-highlight-color:transparent}
+a.t:active{transform:scale(.96);border-color:var(--gold)}
+a.t i{font-style:normal;font-size:2rem;line-height:1}
+a.t small{font-weight:400;color:var(--muted);font-size:.7rem}
+h2{max-width:520px;margin:22px auto 10px;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-family:ui-monospace,monospace;font-weight:500}
+.tip{max-width:520px;margin:22px auto 0;font-size:.8rem;color:var(--muted);line-height:1.5;border-top:1px solid var(--line);padding-top:14px}
+</style></head><body>
+<div class="top"><img id="face" src="icon-192.png" alt="OGK.GoldBot"><div><h1>OGK.<span>Gold</span>Bot</h1><div class="st" id="st">Status wordt geladen…</div></div></div>
+
+<h2>Traden</h2>
+<div class="grid">
+ <a class="t" href="intent://#Intent;package=net.metaquotes.metatrader5;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dnet.metaquotes.metatrader5;end"><i>📈</i>MetaTrader 5</a>
+ <a class="t" href="https://www.tradingview.com/chart/?symbol=OANDA%3AXAUUSD" target="_blank" rel="noopener"><i>🟡</i>Goud-grafiek<small>TradingView</small></a>
+ <a class="t" href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener"><i>📰</i>Nieuws<small>ForexFactory</small></a>
+</div>
+
+<h2>OGK.GoldBot</h2>
+<div class="grid">
+ <a class="t" href="https://ogk-goldbot.github.io/" target="_blank" rel="noopener"><i>🌐</i>Website<small>live score</small></a>
+ <a class="t" href="https://t.me/OGKGoldBot" target="_blank" rel="noopener"><i>✈️</i>Telegram<small>kanaal</small></a>
+ <a class="t" href="intent://#Intent;package=com.facebook.pages.app;S.browser_fallback_url=https%3A%2F%2Fbusiness.facebook.com%2F;end"><i>📅</i>Business Suite<small>planner</small></a>
+ <a class="t" href="https://www.facebook.com/share/19vYUHmB5z/" target="_blank" rel="noopener"><i>🟦</i>Facebook</a>
+ <a class="t" href="https://www.instagram.com/jxr.king/" target="_blank" rel="noopener"><i>📸</i>Instagram</a>
+ <a class="t" href="https://www.tiktok.com/@ogk.goldbot" target="_blank" rel="noopener"><i>🎵</i>TikTok</a>
+</div>
+
+<p class="tip">📲 <b>Als app op je telefoon:</b> open deze pagina in Chrome → ⋮ (rechtsboven) → <b>Toevoegen aan startscherm</b>. Dan staat de robot als icoon tussen je apps.</p>
+
+<script>
+(function(){
+  var F={}, st=document.getElementById('st'), img=document.getElementById('face');
+  function nl(){var p=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Amsterdam',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date()),o={};p.forEach(function(x){o[x.type]=x.value});return o}
+  function upd(face){
+    var o=nl(),h=+o.hour,m=h*60+(+o.minute),we=(o.weekday==='Sat'||o.weekday==='Sun');
+    var open=!we&&h<23, win=!we&&m>=660&&m<960, k='knipoog', t;
+    if(face&&face.open>0){k='werk';t='<b>Aan het werk</b> · '+face.open+' positie(s) open';}
+    else if(win){k='lach';t='<b>Venster open</b> · zoekt een trade tot 16:00';}
+    else if(open&&m<660){k='lach';t='<b>Markt open</b> · venster om 11:00';}
+    else if(open){t='<b>No more trades</b> vandaag · morgen 11:00';k='knipoog';}
+    else {t='<b>Markt dicht</b> · '+(we||o.weekday==='Fri'?'maandag':'morgen')+' 11:00';}
+    if(face&&face.open===0&&face.last_close_utc){var d=new Date(face.last_close_utc*1000).toDateString()===new Date().toDateString();
+      if(d&&face.last_net){k=face.last_net>0?'blij':'verdrietig';t+=' · laatste trade '+(face.last_net>0?'gewonnen':'verloren');}}
+    st.innerHTML=t; if(F[k]) img.src=F[k];
+  }
+  fetch('faces.json').then(function(r){return r.json()}).then(function(j){F=j;load()}).catch(function(){load()});
+  function load(){fetch('../face.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(upd).catch(function(){upd(null)})}
+  setInterval(load,120000);
+})();
+</script>
+</body></html>
